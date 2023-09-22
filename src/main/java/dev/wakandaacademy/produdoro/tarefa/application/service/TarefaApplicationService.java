@@ -1,6 +1,13 @@
 package dev.wakandaacademy.produdoro.tarefa.application.service;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
 import dev.wakandaacademy.produdoro.handler.APIException;
+import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaDetalhadoResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
@@ -9,11 +16,6 @@ import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioReposi
 import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @Log4j2
@@ -42,12 +44,12 @@ public class TarefaApplicationService implements TarefaService {
         return tarefa;
     }
 	@Override
-	public List<Tarefa> buscarTarefasPorUsuario(String emailUsuario, UUID idUsuario) {
+	public List<TarefaDetalhadoResponse> buscarTarefasPorUsuario(String emailUsuario, UUID idUsuario) {
         log.info("[inicia] TarefaApplicationService - buscarTarefasPorUsuario");
         Usuario usuario = usuarioRepository.buscaUsuarioPorEmail(emailUsuario);
         usuario.validaIdUsuario(idUsuario);
         List<Tarefa> tarefas = tarefaRepository.buscaTarefasPorUsuario(idUsuario);
         log.info("[finaliza] TarefaApplicationService - buscarTarefasPorUsuario");
-		return null;
+		return TarefaDetalhadoResponse.converteListaTarefas(tarefas);
 	}
 }
