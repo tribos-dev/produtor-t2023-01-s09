@@ -38,7 +38,11 @@ public class Usuario {
 	public Usuario(UsuarioNovoRequest usuarioNovo, ConfiguracaoPadrao configuracaoPadrao) {
 		this.idUsuario = UUID.randomUUID();
 		this.email = usuarioNovo.getEmail();
-		this.status = StatusUsuario.FOCO;
+		this.status = StatusUsuario.PAUSA_LONGA;
 		this.configuracao = new ConfiguracaoUsuario(configuracaoPadrao);
+	}
+
+	public void mudaStatusParaFoco() {
+this.status = StatusUsuario.FOCO;		
 	}
 }

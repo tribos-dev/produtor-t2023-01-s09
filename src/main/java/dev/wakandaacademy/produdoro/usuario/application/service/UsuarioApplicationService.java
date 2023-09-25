@@ -1,19 +1,21 @@
 package dev.wakandaacademy.produdoro.usuario.application.service;
 
+import java.util.UUID;
+
 import javax.validation.Valid;
 
-import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import dev.wakandaacademy.produdoro.credencial.application.service.CredencialService;
+import dev.wakandaacademy.produdoro.handler.APIException;
 import dev.wakandaacademy.produdoro.pomodoro.application.service.PomodoroService;
 import dev.wakandaacademy.produdoro.usuario.application.api.UsuarioCriadoResponse;
 import dev.wakandaacademy.produdoro.usuario.application.api.UsuarioNovoRequest;
+import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
 import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-
-import java.util.UUID;
 
 @Service
 @Log4j2
@@ -43,6 +45,13 @@ public class UsuarioApplicationService implements UsuarioService {
 	@Override
 	public void mudaStatusParaFoco(String usuarioEmail, UUID idUsuario) {
 		log.info("[inicia] UsuarioApplicationService - mudaStatusParaFoco");	
+		Usuario usuario = usuarioRepository.buscaUsuarioPorId(idUsuario);
+		if (usuarioEmail.equals(usuario.getEmail())){
+			usuario.mudaStatusParaFoco();
+			usuarioRepository.salva(usuario);
+		} else {
+			throw APIException.build(HttpStatus.BAD_REQUEST, "Usuarion não autorizado!");
+		}
 		log.info("[finaliza] UsuarioApplicationService - mudaStatusParaFoco");		
 	}
 }
