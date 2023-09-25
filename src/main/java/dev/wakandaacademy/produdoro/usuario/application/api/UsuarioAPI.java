@@ -17,4 +17,8 @@ public interface UsuarioAPI {
 	@GetMapping(value = "/{idUsuario}")
 	@ResponseStatus(code = HttpStatus.OK)
 	UsuarioCriadoResponse buscaUsuarioPorId(@PathVariable UUID idUsuario);
+
+	@PostMapping(value = "/{idUsuario}/pausalonga")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	void mudaStatusParaPausaLonga();
 }
