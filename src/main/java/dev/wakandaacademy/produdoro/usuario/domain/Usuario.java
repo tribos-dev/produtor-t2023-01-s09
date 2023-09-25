@@ -43,10 +43,4 @@ public class Usuario {
 		this.status = StatusUsuario.FOCO;
 		this.configuracao = new ConfiguracaoUsuario(configuracaoPadrao);
 	}
-
-	public void validaIdUsuario(UUID idUsuario) {
-		if(!this.idUsuario.equals(idUsuario)) {
-			throw APIException.build(HttpStatus.UNAUTHORIZED, "Id não pertence ao usuário logado");
-		}
-	}
 }
