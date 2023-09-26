@@ -12,6 +12,7 @@ import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+
 @RestController
 @Log4j2
 @RequiredArgsConstructor
@@ -40,6 +41,12 @@ public class TarefaRestController implements TarefaAPI {
 		String usuario = tokenService.getUsuarioByBearerToken(token).orElseThrow(() -> APIException.build(HttpStatus.UNAUTHORIZED, token));
 		log.info("[usuario] {}", usuario);
 		return usuario;
+	}
+
+	@Override
+	public void incrementaPomodoro(String token, UUID idTarefa) {
+		log.info("[inicia] TarefaRestController - detalhaTarefa");
+		log.info("[finaliza] TarefaRestController - detalhaTarefa");
 	}
 
 }
