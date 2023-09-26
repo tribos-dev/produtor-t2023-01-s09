@@ -40,4 +40,9 @@ public class TarefaApplicationService implements TarefaService {
         log.info("[finaliza] TarefaApplicationService - detalhaTarefa");
         return tarefa;
     }
+	@Override
+	public void incrementaPomodoro(String token, String usuarioEmail) {
+		log.info("[inicia] TarefaApplicationService - incrementaPomodoro");
+		log.info("[finaliza] TarefaApplicationService - incrementaPomodoro");
+	}
 }
