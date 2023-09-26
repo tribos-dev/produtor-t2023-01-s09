@@ -46,11 +46,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/public/**").permitAll().anyRequest().authenticated().and().csrf()
-				.disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.addFilterBefore(new FiltroToken(tokenService, credencialService),
-						UsernamePasswordAuthenticationFilter.class);
-	}
-
+		.disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+		.addFilterBefore(new FiltroToken(tokenService, credencialService),
+				UsernamePasswordAuthenticationFilter.class);
+}
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/**.html", "/v3/api-docs/**", "/webjars/**", "/configuration/**", "/swagger-ui/**",

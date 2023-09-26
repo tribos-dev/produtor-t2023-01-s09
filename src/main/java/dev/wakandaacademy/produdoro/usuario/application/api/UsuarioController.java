@@ -16,28 +16,29 @@ import java.util.UUID;
 @Log4j2
 @RequiredArgsConstructor
 public class UsuarioController implements UsuarioAPI {
-	private final UsuarioService usuarioAppplicationService;
+    private final UsuarioService usuarioAppplicationService;
 
-	@Override
-	public UsuarioCriadoResponse postNovoUsuario(@Valid UsuarioNovoRequest usuarioNovo) {
-		log.info("[inicia] UsuarioController - postNovoUsuario");
-		UsuarioCriadoResponse usuarioCriado = usuarioAppplicationService.criaNovoUsuario(usuarioNovo);
-		log.info("[finaliza] UsuarioController - postNovoUsuario");
-		return usuarioCriado;
-	}
-	@Override
-	public UsuarioCriadoResponse buscaUsuarioPorId(UUID idUsuario) {
-		log.info("[inicia] UsuarioController - buscaUsuarioPorId");
-		log.info("[idUsuario] {}", idUsuario);
-		UsuarioCriadoResponse buscaUsuario = usuarioAppplicationService.buscaUsuarioPorId(idUsuario);
-		log.info("[finaliza] UsuarioController - buscaUsuarioPorId");
-		return buscaUsuario;
-	}
+    @Override
+    public UsuarioCriadoResponse postNovoUsuario(@Valid UsuarioNovoRequest usuarioNovo) {
+        log.info("[inicia] UsuarioController - postNovoUsuario");
+        UsuarioCriadoResponse usuarioCriado = usuarioAppplicationService.criaNovoUsuario(usuarioNovo);
+        log.info("[finaliza] UsuarioController - postNovoUsuario");
+        return usuarioCriado;
+    }
 
-	
-	@Override
-	public void mudaStatusParaPausaLonga() {
-		log.info("[inicia]UsuarioController - mudaStatusParaPausaLonga");
-		log.info("[Finaliza]UsuarioController - mudaStatusParaPausaLonga");
-	}
+    @Override
+    public UsuarioCriadoResponse buscaUsuarioPorId(UUID idUsuario) {
+        log.info("[inicia] UsuarioController - buscaUsuarioPorId");
+        log.info("[idUsuario] {}", idUsuario);
+        UsuarioCriadoResponse buscaUsuario = usuarioAppplicationService.buscaUsuarioPorId(idUsuario);
+        log.info("[finaliza] UsuarioController - buscaUsuarioPorId");
+        return buscaUsuario;
+    }
+
+
+    @Override
+    public void mudaStatusParaPausaLonga() {
+        log.info("[inicia]UsuarioController - mudaStatusParaPausaLonga");
+        log.info("[Finaliza]UsuarioController - mudaStatusParaPausaLonga");
+    }
 }
