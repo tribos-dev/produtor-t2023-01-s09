@@ -20,5 +20,5 @@ public interface UsuarioAPI {
 
 	@PostMapping(value = "/{idUsuario}/pausalonga")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	void mudaStatusParaPausaLonga();
+	void mudaStatusParaPausaLonga(@PathVariable UUID idUsuario);
 }
