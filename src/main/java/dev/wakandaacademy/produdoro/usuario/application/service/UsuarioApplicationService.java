@@ -47,12 +47,14 @@ public class UsuarioApplicationService implements UsuarioService {
 
 
 	@Override
-	public void mudaStatusParaPausaLonga(UUID idUsuario) {
+	public void mudaStatusParaPausaLonga(String email, UUID idUsuario) {
 		log.info("[inicia] UsuarioApplicationService - mudaStatusParaPausaLonga");
 		Usuario usuario = usuarioRepository.buscaUsuarioPorId(idUsuario);
 		if (!usuario.getIdUsuario().equals(idUsuario)) {
 			throw APIException.build(HttpStatus.UNAUTHORIZED, "credencial de autenticação não e valida");
 		}
+		usuario.mudaStatusParaPausaLonga(); 
+		usuarioRepository.salva(usuario);
 		log.info("[finaliza] UsuarioApplicationService - mudaStatusParaPausaLonga");
 		
 	}
