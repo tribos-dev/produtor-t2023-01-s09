@@ -45,13 +45,12 @@ public class UsuarioApplicationService implements UsuarioService {
 	@Override
 	public void mudaStatusParaFoco(String usuarioEmail, UUID idUsuario) {
 		log.info("[inicia] UsuarioApplicationService - mudaStatusParaFoco");	
-		Usuario usuario = usuarioRepository.buscaUsuarioPorId(idUsuario);
-		if (usuarioEmail.equals(usuario.getEmail())){
-			usuario.mudaStatusParaFoco();
-			usuarioRepository.salva(usuario);
-		} else {
-			throw APIException.build(HttpStatus.BAD_REQUEST, "Usuarion não autorizado!");
-		}
+		Usuario usuario = usuarioRepository.buscaUsuarioPorEmail(usuarioEmail);
+		if(!idUsuario.equals(usuario.getIdUsuario())) {
+			throw APIException.build(HttpStatus.UNAUTHORIZED, "Usuário não autorizado!");
+		} 
+		usuario.mudaParaFoco();
+		usuarioRepository.salva(usuario);
 		log.info("[finaliza] UsuarioApplicationService - mudaStatusParaFoco");		
 	}
 }
