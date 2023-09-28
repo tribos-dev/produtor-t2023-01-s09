@@ -45,7 +45,8 @@ public class TarefaApplicationService implements TarefaService {
         log.info("[inicia] TarefaApplicationService - ativaTarefa");
         Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(emailUsuario);
         Tarefa tarefa =
-                tarefaRepository.buscaTarefaPorId(idTarefa).orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "id da tarefa invalido"));
+                tarefaRepository.buscaTarefaPorId(idTarefa)
+                .orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "id da tarefa invalido"));
         tarefa.pertenceAoUsuario(usuarioPorEmail);
         tarefaRepository.desativaTarefas(usuarioPorEmail.getIdUsuario());
         tarefa.ativaTarefa();
