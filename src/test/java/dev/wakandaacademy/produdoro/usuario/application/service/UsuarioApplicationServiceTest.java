@@ -1,48 +1,53 @@
 package dev.wakandaacademy.produdoro.usuario.application.service;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.UUID;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import dev.wakandaacademy.produdoro.DataHelper;
+import dev.wakandaacademy.produdoro.credencial.application.service.CredencialService;
+import dev.wakandaacademy.produdoro.pomodoro.application.service.PomodoroService;
+import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
+import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
+
+@ContextConfiguration(classes = {UsuarioApplicationService.class })
+@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class UsuarioApplicationServiceTest {
-//	@Mock
-//	private UsuarioRepository usuarioRepository;
-//
-//	@InjectMocks
-//	private UsuarioApplicationService usuarioApplicationService;
-//
-//	private Usuario usuario;
-//
-//	@BeforeEach
-//	public void setUp() {
-//	    MockitoAnnotations.initMocks(this);
-//	    usuario = DataHelper.createUsuario();
-//	    when(usuarioRepository.buscaUsuarioPorEmail(anyString())).thenReturn(usuario);
-//	}
-//
-//	@Test
-//	void mudaStatusParaFocoTest() {
-//	    //chama o metodo.
-//	    usuarioApplicationService.mudaStatusParaFoco("teste12@gmail.com", usuario.getIdUsuario());
-//
-//	    //verifica se os metodos foram chamados uma vez cada um.
-//	    verify(usuarioRepository, times(1)).buscaUsuarioPorEmail("teste12@gmail.com");
-//	    verify(usuarioRepository, times(1)).salva(usuario);
-//
-//	    //verifica se status foi alterado para foco.
-//	    assertEquals(StatusUsuario.FOCO, usuario.getStatus());
-//	}
-//
-//	@Test
-//	void naoMudaStatusParaFocoTest() {
-//	    // cria um id não autorizado
-//	    UUID idUsuario = UUID.randomUUID();
-//
-//	    //Chama o método e lança a APIException
-//	    APIException exception = assertThrows(APIException.class, () -> {
-//	    usuarioApplicationService.mudaStatusParaFoco("teste12@gmail.com", idUsuario);});
-//
-//	    //verifica se a mensagem e o Retorno estão corretos.
-//	    assertEquals(HttpStatus.UNAUTHORIZED, exception.getStatus());
-//	    assertEquals("Usuário não autorizado!", exception.getMessage());
-//
-//	    // Verifica que o método salva não foi chamado após a exceção
-//	    verify(usuarioRepository, never()).salva(any(Usuario.class));
-//	}
+	@MockBean
+    private UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioApplicationService usuarioApplicationService;
+    @MockBean
+    private CredencialService credencialService;
+    @MockBean
+    private PomodoroService pomodoroService;
+    @MockBean
+    private Usuario usuario;
+
+
+    private static final UUID usuario1 = UUID.fromString("a713162f-20a9-4db9-a85b-90cd51ab18f4");
+
+    @Test
+    public void testMudaStatusParaFoco() {
+        String usuarioEmail = "email@email.com";
+        UUID idUsuario = UUID.fromString("a713162f-20a9-4db9-a85b-90cd51ab18f4");
+        Usuario usuario = DataHelper.createUsuario();
+
+        when(usuarioRepository.buscaUsuarioPorEmail(usuarioEmail)).thenReturn(usuario);
+
+        usuarioApplicationService.mudaStatusParaFoco(usuarioEmail, idUsuario);
+
+        verify(usuarioRepository,times(1)).salva(usuario);
+    }
 }
