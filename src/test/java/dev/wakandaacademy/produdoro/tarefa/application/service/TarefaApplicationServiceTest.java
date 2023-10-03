@@ -3,6 +3,7 @@ package dev.wakandaacademy.produdoro.tarefa.application.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import org.junit.jupiter.api.Assertions;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -16,11 +17,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import dev.wakandaacademy.produdoro.handler.APIException;
 import dev.wakandaacademy.produdoro.DataHelper;
 import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
+import dev.wakandaacademy.produdoro.tarefa.domain.StatusAtivacaoTarefa;
 import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
 import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
 import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
@@ -75,6 +79,27 @@ class TarefaApplicationServiceTest {
     }
     
     @Test
+    void deveAtivarTarefaDoUsuario() {
+    	Usuario usuario = DataHelper.createUsuario();
+    	Tarefa tarefa = DataHelper.createTarefa();
+        when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
+        when(tarefaRepository.buscaTarefaPorId(any())).thenReturn(Optional.of(tarefa));
+        tarefaApplicationService.ativaTarefa(tarefa.getIdTarefa(), usuario.getEmail());
+        verify(usuarioRepository, times(1)).buscaUsuarioPorEmail(usuario.getEmail());
+        verify(tarefaRepository, times(1)).buscaTarefaPorId(tarefa.getIdTarefa());
+        assertEquals(StatusAtivacaoTarefa.ATIVA, tarefa.getStatusAtivacao());
+    }
+    
+    @Test
+    void deveRetornarErroAoAtivarTarefa() {
+    	Usuario usuario = DataHelper.createUsuario();
+        when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
+        APIException ex = Assertions.assertThrows(APIException.class, () -> tarefaApplicationService
+        		.ativaTarefa(UUID.randomUUID(), usuario.getEmail()));
+        assertEquals("id da tarefa invalido", ex.getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusException());
+    }
+              
     void testEditaTarefa() {
         EditaTarefaRequest request = dataHelper.createEditaTarefaRequest();
         tarefaApplicationService.editaTarefa(email, idTarefa, request);
@@ -92,5 +117,6 @@ class TarefaApplicationServiceTest {
         verify(tarefaMock).pertenceAoUsuario(usuarioMock);
         verify(tarefaMock).concluiTarefa();
         verify(tarefaRepository).salva(tarefaMock);
+        }
     }
 }

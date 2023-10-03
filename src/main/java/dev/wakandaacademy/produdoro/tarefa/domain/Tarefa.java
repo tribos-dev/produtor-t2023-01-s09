@@ -54,6 +54,10 @@ public class Tarefa {
 		}
 	}
 
+	public void ativaTarefa() {
+		this.statusAtivacao = StatusAtivacaoTarefa.ATIVA;
+	}
+		
 	public void altera(@Valid EditaTarefaRequest editaTarefaRequest) {
 		this.descricao = editaTarefaRequest.getDescricao();
 	}
