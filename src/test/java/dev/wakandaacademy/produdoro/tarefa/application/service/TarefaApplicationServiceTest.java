@@ -11,6 +11,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import static org.mockito.Mockito.mock;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaDetalhadoResponse;
 import dev.wakandaacademy.produdoro.handler.APIException;
 import dev.wakandaacademy.produdoro.DataHelper;
 import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefaRequest;
@@ -83,6 +86,25 @@ class TarefaApplicationServiceTest {
     }
     
     @Test
+    void deveRetornarListaTarefasPorUsuario() {
+    	Usuario usuario = DataHelper.createUsuario();
+    	List<Tarefa> tarefas = DataHelper.createListTarefa();
+        when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(DataHelper.createUsuario());
+        when(tarefaRepository.buscaTarefasPorUsuario(any(UUID.class))).thenReturn(tarefas);
+        List<TarefaDetalhadoResponse> response = tarefaApplicationService.buscarTarefasPorUsuario(usuario.getEmail(), usuario.getIdUsuario());
+        assertEquals(8, response.size());
+        assertNotNull(response);
+    }
+    
+    @Test
+    void deveRetornarExceptionAoListarTarefasPorUsuario() {
+        when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(DataHelper.createUsuario());
+        
+        APIException ex = Assertions.assertThrows(APIException.class, () -> tarefaApplicationService.buscarTarefasPorUsuario("invalido@email.com", UUID.randomUUID()));
+        assertEquals("Usuário não autorizado", ex.getMessage());
+        assertEquals(HttpStatus.UNAUTHORIZED, ex.getStatusException());
+    }
+    
     void testeDeletaTarefa() {
     	UUID idTarefa = UUID.randomUUID();
     	String usuario = "exemplo@usuario.com";

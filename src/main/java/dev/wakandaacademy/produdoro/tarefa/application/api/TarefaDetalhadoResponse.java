@@ -1,11 +1,12 @@
 package dev.wakandaacademy.produdoro.tarefa.application.api;
 
 import java.util.UUID;
-
+import java.util.List;
 import dev.wakandaacademy.produdoro.tarefa.domain.StatusAtivacaoTarefa;
 import dev.wakandaacademy.produdoro.tarefa.domain.StatusTarefa;
 import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
 import lombok.Value;
+import java.util.stream.Collectors;
 
 @Value
 public class TarefaDetalhadoResponse {
@@ -29,4 +30,8 @@ public class TarefaDetalhadoResponse {
         this.statusAtivacao = tarefa.getStatusAtivacao();
         this.contagemPomodoro = tarefa.getContagemPomodoro();
     }
+
+	public static List<TarefaDetalhadoResponse> converteListaTarefas(List<Tarefa> tarefas) {
+		return tarefas.stream().map(TarefaDetalhadoResponse::new).collect(Collectors.toList());
+	}
 }

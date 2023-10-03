@@ -1,9 +1,11 @@
 package dev.wakandaacademy.produdoro.tarefa.application.service;
 
+import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import dev.wakandaacademy.produdoro.handler.APIException;
+import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaDetalhadoResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
@@ -18,6 +20,7 @@ import javax.validation.Valid;
 @Service
 @Log4j2
 @RequiredArgsConstructor
+
 public class TarefaApplicationService implements TarefaService {
 	private final TarefaRepository tarefaRepository;
 	private final UsuarioRepository usuarioRepository;
@@ -80,6 +83,25 @@ public class TarefaApplicationService implements TarefaService {
 		log.info("[finaliza] TarefaApplicationService - editaTarefa");
     }
 
+	@Override
+	public List<TarefaDetalhadoResponse> buscarTarefasPorUsuario(String emailUsuario, UUID idUsuario) {
+        log.info("[inicia] TarefaApplicationService - buscarTarefasPorUsuario");
+        Usuario usuario = usuarioRepository.buscaUsuarioPorEmail(emailUsuario);
+        usuarioRepository.buscaUsuarioPorId(idUsuario);
+        validaIdUsuario(idUsuario, usuario.getIdUsuario());
+        List<Tarefa> tarefas = tarefaRepository.buscaTarefasPorUsuario(idUsuario);
+        log.info("[finaliza] TarefaApplicationService - buscarTarefasPorUsuario");
+		return TarefaDetalhadoResponse.converteListaTarefas(tarefas);
+	}
+
+	private void validaIdUsuario(UUID idUsuarioRequest, UUID idUsuario) {
+        log.info("[inicia] TarefaApplicationService - validaIdUsuario");
+        if(!idUsuarioRequest.equals(idUsuario)) {
+			throw APIException.build(HttpStatus.UNAUTHORIZED, "Usuário não autorizado");
+        }
+        log.info("[finaliza] TarefaApplicationService - validaIdUsuario");
+    }
+    
 	public void concluiTarefa(String usuario, UUID idTarefa) {
 		log.info("[inicia] TarefaApplicationService - concluiTarefa");
 		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);

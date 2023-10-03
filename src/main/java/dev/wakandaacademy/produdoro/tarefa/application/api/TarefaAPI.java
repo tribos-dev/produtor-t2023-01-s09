@@ -1,5 +1,6 @@
 package dev.wakandaacademy.produdoro.tarefa.application.api;
 
+import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,10 @@ public interface TarefaAPI {
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     void incrementaPomodoro(@RequestHeader(name = "Authorization",required = true) String token, 
     		@PathVariable UUID idTarefa);
+    
+    @GetMapping("/usuario/{idUsuario}")
+    @ResponseStatus(code = HttpStatus.OK)
+    List<TarefaDetalhadoResponse> buscarTodasTarefasPorUsuario(@RequestHeader(name = "Authorization",required = true) String token, @PathVariable UUID idUsuario);
     
     @DeleteMapping("/deleta-tarefa/{idTarefa}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
