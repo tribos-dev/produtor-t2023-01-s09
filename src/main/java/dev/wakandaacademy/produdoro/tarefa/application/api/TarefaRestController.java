@@ -51,5 +51,4 @@ public class TarefaRestController implements TarefaAPI {
 		log.info("[finaliza] TarefaRestController - buscarTodasTarefasPorUsuario");
 		return listaTarefas;
 	}
-
 }

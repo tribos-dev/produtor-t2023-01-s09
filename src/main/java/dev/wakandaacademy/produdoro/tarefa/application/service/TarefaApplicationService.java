@@ -47,6 +47,7 @@ public class TarefaApplicationService implements TarefaService {
 	public List<TarefaDetalhadoResponse> buscarTarefasPorUsuario(String emailUsuario, UUID idUsuario) {
         log.info("[inicia] TarefaApplicationService - buscarTarefasPorUsuario");
         Usuario usuario = usuarioRepository.buscaUsuarioPorEmail(emailUsuario);
+        usuarioRepository.buscaUsuarioPorId(idUsuario);
         validaIdUsuario(idUsuario, usuario.getIdUsuario());
         List<Tarefa> tarefas = tarefaRepository.buscaTarefasPorUsuario(idUsuario);
         log.info("[finaliza] TarefaApplicationService - buscarTarefasPorUsuario");
@@ -55,7 +56,7 @@ public class TarefaApplicationService implements TarefaService {
 	private void validaIdUsuario(UUID idUsuarioRequest, UUID idUsuario) {
         log.info("[inicia] TarefaApplicationService - validaIdUsuario");
         if(!idUsuarioRequest.equals(idUsuario)) {
-			throw APIException.build(HttpStatus.BAD_REQUEST, "Usuário não encontrado");
+			throw APIException.build(HttpStatus.UNAUTHORIZED, "Usuário não autorizado");
         }
         log.info("[finaliza] TarefaApplicationService - validaIdUsuario");
 	}

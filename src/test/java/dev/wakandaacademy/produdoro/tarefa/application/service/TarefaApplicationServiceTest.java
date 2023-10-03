@@ -77,14 +77,8 @@ class TarefaApplicationServiceTest {
         when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(DataHelper.createUsuario());
         
         APIException ex = Assertions.assertThrows(APIException.class, () -> tarefaApplicationService.buscarTarefasPorUsuario("invalido@email.com", UUID.randomUUID()));
-        assertEquals("Usuário não encontrado", ex.getMessage());
-        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusException());
+        assertEquals("Usuário não autorizado", ex.getMessage());
+        assertEquals(HttpStatus.UNAUTHORIZED, ex.getStatusException());
     }
-    
-    
-    
-    
-    
-    
     
 }
