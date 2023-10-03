@@ -1,9 +1,6 @@
 package dev.wakandaacademy.produdoro.usuario.application.api;
-
 import java.util.UUID;
-
 import javax.validation.Valid;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,4 +25,8 @@ public interface UsuarioAPI {
 	@PostMapping(value = "/{idUsuario}/pausalonga")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	void mudaStatusParaPausaLonga(@RequestHeader(name = "Authorization", required = true) String token, @PathVariable UUID idUsuario);
+	
+	@PostMapping(value = "/{idUsuario}/pausacurta")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	void mudaStatuParaPausaCurta(@RequestHeader(name = "Authorization", required = true) String token, @PathVariable UUID idUsuario);
 }

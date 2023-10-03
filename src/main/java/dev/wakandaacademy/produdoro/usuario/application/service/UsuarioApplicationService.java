@@ -44,7 +44,18 @@ public class UsuarioApplicationService implements UsuarioService {
 		log.info("[finaliza] UsuarioApplicationService - buscaUsuarioPorId");
 		return new UsuarioCriadoResponse(usuario);
 	}
-
+	
+	@Override
+	public void mudaStatusParaPausaCurta(String email, UUID idUsuario) {
+		log.info("[inicia] UsuarioApplicationService - mudaStatusParaPausaCurta");
+		Usuario usuario = usuarioRepository.buscaUsuarioPorEmail(email);
+		if (!idUsuario.equals(usuario.getIdUsuario())) {
+			throw APIException.build(HttpStatus.UNAUTHORIZED, "credencial de autenticação não e valida");
+		}
+		usuario.mudaStatusParaPausaCurta(); 
+		usuarioRepository.salva(usuario);
+		log.info("[finaliza] UsuarioApplicationService - mudaStatusParaPausaCurta");
+	}
 
 	@Override
 	public void mudaStatusParaPausaLonga(String email, UUID idUsuario) {
