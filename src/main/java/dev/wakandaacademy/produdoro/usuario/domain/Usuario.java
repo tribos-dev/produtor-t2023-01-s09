@@ -1,14 +1,11 @@
 package dev.wakandaacademy.produdoro.usuario.domain;
 
 import java.util.UUID;
-
 import javax.validation.constraints.Email;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.http.HttpStatus;
-
 import dev.wakandaacademy.produdoro.handler.APIException;
 import dev.wakandaacademy.produdoro.pomodoro.domain.ConfiguracaoPadrao;
 import dev.wakandaacademy.produdoro.usuario.application.api.UsuarioNovoRequest;
@@ -40,7 +37,19 @@ public class Usuario {
 	public Usuario(UsuarioNovoRequest usuarioNovo, ConfiguracaoPadrao configuracaoPadrao) {
 		this.idUsuario = UUID.randomUUID();
 		this.email = usuarioNovo.getEmail();
-		this.status = StatusUsuario.FOCO;
+		this.status = StatusUsuario.PAUSA_LONGA;
 		this.configuracao = new ConfiguracaoUsuario(configuracaoPadrao);
+	}
+
+	public void mudaParaFoco() {
+		this.status = StatusUsuario.FOCO;	
+	}	
+	
+	public void mudaStatusParaPausaLonga(){
+		this.status = StatusUsuario.PAUSA_LONGA;
+	}
+
+	public void mudaStatusParaPausaCurta(){
+		this.status = StatusUsuario.PAUSA_CURTA;
 	}
 }
