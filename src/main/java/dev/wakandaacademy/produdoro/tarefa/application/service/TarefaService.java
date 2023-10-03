@@ -14,4 +14,5 @@ public interface TarefaService {
 	void ativaTarefa(UUID idTarefa, String emailUsuario);
 	void editaTarefa(String usuario, UUID idTarefa, @Valid EditaTarefaRequest editaTarefaRequest);
 	void concluiTarefa(String usuario, UUID idTarefa);
+   	void deletaTarefa(UUID idTarefa, String usuario);
 }
