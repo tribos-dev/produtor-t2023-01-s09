@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import dev.wakandaacademy.produdoro.pomodoro.domain.ConfiguracaoPadrao;
+import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.domain.StatusAtivacaoTarefa;
 import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
@@ -12,6 +13,15 @@ import dev.wakandaacademy.produdoro.usuario.domain.StatusUsuario;
 import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
 
 public class DataHelper {
+
+	public static final String TOKEN_VALIDO = "tokenValido@email.com";
+    public static final String TOKEN_INVALIDO = "tokenInvalido@email.com";
+    public static final UUID ID_TAREFA_VALIDO = UUID.fromString("8d58875d-2455-4075-8b5d-57c73fcf1241");
+    public static final UUID ID_TAREFA_INVALIDO = UUID.fromString("b92ee6fa-9ae9-45ac-afe0-fb8e4460d839");
+    public static final UUID ID_USUARIO_VALIDO = UUID.fromString("0d51b6fe-ff69-4e36-a6ee-7b6983237872");
+    public static final UUID ID_USUARIO_INVALIDO = UUID.fromString("fbd3b3e0-1484-4004-9564-808f1c3516bb");
+    public static final UUID ID_AREA = UUID.fromString("462ff63d-412b-4a19-9c43-bc5969b15989");
+    public static final UUID ID_PROJETO = UUID.fromString("1fc65f65-4862-4598-a30c-f317dfb3cbe7");
 
     private static final UUID usuario1 = UUID.fromString("a713162f-20a9-4db9-a85b-90cd51ab18f4");
 
@@ -53,4 +63,9 @@ public class DataHelper {
 
         );
     }
+
+	public EditaTarefaRequest createEditaTarefaRequest() {
+		EditaTarefaRequest request = new EditaTarefaRequest("ola mundo");
+        return request;
+	}
 }
