@@ -2,6 +2,7 @@ package dev.wakandaacademy.produdoro.tarefa.application.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import org.junit.jupiter.api.Assertions;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -79,6 +80,26 @@ class TarefaApplicationServiceTest {
     }
     
     @Test
+    void deveIncrementaUmPomodoroAUmaTarefa() {
+    	Usuario usuario = DataHelper.createUsuario();
+    	Tarefa tarefa = DataHelper.createTarefa();
+    	when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
+        when(tarefaRepository.buscaTarefaPorId(any())).thenReturn(Optional.of(tarefa));
+    	tarefaApplicationService.incrementaPomodoro(tarefa.getIdTarefa(), usuario.getEmail());
+    	verify(usuarioRepository, times(1)).buscaUsuarioPorEmail(usuario.getEmail());
+        verify(tarefaRepository, times(1)).buscaTarefaPorId(tarefa.getIdTarefa());
+    	assertEquals(2, tarefa.getContagemPomodoro());
+    }
+    
+    @Test
+    void deveRetornarUmaExceptionAoIncrementarPoromoroAUmaTarefa() {
+    	Tarefa tarefa = DataHelper.createTarefa();
+    	String usuarioEmailInvalido = "emailinvalido@gmail.com";
+    	when(usuarioRepository.buscaUsuarioPorEmail(usuarioEmailInvalido)).thenThrow(APIException.class);
+    	APIException ex = assertThrows(APIException.class, () -> tarefaApplicationService
+    			.incrementaPomodoro(tarefa.getIdTarefa(), usuarioEmailInvalido));
+    }
+    
     void deveAtivarTarefaDoUsuario() {
     	Usuario usuario = DataHelper.createUsuario();
     	Tarefa tarefa = DataHelper.createTarefa();
@@ -100,6 +121,7 @@ class TarefaApplicationServiceTest {
         assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusException());
     }
               
+    @Test
     void testEditaTarefa() {
         EditaTarefaRequest request = dataHelper.createEditaTarefaRequest();
         tarefaApplicationService.editaTarefa(email, idTarefa, request);

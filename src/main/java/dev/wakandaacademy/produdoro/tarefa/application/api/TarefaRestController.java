@@ -11,6 +11,7 @@ import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+
 @RestController
 @Log4j2
 @RequiredArgsConstructor
@@ -42,6 +43,13 @@ public class TarefaRestController implements TarefaAPI {
 	}
 
 	@Override
+	public void incrementaPomodoro(String token, UUID idTarefa) {
+		log.info("[inicia] TarefaRestController - incrementaPomodoro");
+		String usuarioEmail = getUsuarioByToken(token);
+		tarefaService.incrementaPomodoro(idTarefa, usuarioEmail);
+		log.info("[finaliza] TarefaRestController - incrementaPomodoro");
+	}
+
 	public void ativaTarefa(String token, UUID idTarefa) {
 		log.info("[inicia] TarefaRestController - ativaTarefa");
 		String emailUsuario = getUsuarioByToken(token);

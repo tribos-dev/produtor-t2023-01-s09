@@ -10,6 +10,7 @@ import javax.validation.Valid;
 public interface TarefaService {
     TarefaIdResponse criaNovaTarefa(TarefaRequest tarefaRequest);
     Tarefa detalhaTarefa(String usuario, UUID idTarefa);
+	void incrementaPomodoro(UUID idTarefa, String usuarioEmail);
 	void ativaTarefa(UUID idTarefa, String emailUsuario);
 	void editaTarefa(String usuario, UUID idTarefa, @Valid EditaTarefaRequest editaTarefaRequest);
 	void concluiTarefa(String usuario, UUID idTarefa);
