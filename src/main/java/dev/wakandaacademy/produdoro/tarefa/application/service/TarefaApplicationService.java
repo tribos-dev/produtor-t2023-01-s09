@@ -1,6 +1,7 @@
 package dev.wakandaacademy.produdoro.tarefa.application.service;
 
 import dev.wakandaacademy.produdoro.handler.APIException;
+import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
@@ -11,8 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.util.UUID;
+import javax.validation.Valid;
 
 @Service
 @Log4j2
@@ -20,7 +21,6 @@ import java.util.UUID;
 public class TarefaApplicationService implements TarefaService {
     private final TarefaRepository tarefaRepository;
     private final UsuarioRepository usuarioRepository;
-
 
     @Override
     public TarefaIdResponse criaNovaTarefa(TarefaRequest tarefaRequest) {
@@ -54,4 +54,23 @@ public class TarefaApplicationService implements TarefaService {
         log.info("[finaliza] TarefaApplicationService - ativaTarefa");
 	}
 	
+	public void editaTarefa(String usuario, UUID idTarefa, @Valid EditaTarefaRequest editaTarefaRequest) {
+		log.info("[inicia] TarefaApplicationService - editaTarefa");
+		Tarefa tarefa = detalhaTarefa(usuario, idTarefa);
+		tarefa.altera(editaTarefaRequest);
+		tarefaRepository.salva(tarefa);
+		log.info("[finaliza] TarefaApplicationService - editaTarefa");
+    }
+
+	public void concluiTarefa(String usuario, UUID idTarefa) {
+		log.info("[inicia] TarefaApplicationService - concluiTarefa");
+		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+		log.info("[usuarioPorEmail] {}", usuarioPorEmail);
+		Tarefa tarefa =
+				tarefaRepository.buscaTarefaPorId(idTarefa).orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "Tarefa não encontrada!"));
+		tarefa.pertenceAoUsuario(usuarioPorEmail);
+		tarefa.concluiTarefa();
+		tarefaRepository.salva(tarefa);
+		log.info("[finaliza] TarefaApplicationService - concluiTarefa");
+	}
 }

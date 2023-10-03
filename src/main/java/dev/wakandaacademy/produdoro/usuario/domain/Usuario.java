@@ -1,13 +1,10 @@
 package dev.wakandaacademy.produdoro.usuario.domain;
 
 import java.util.UUID;
-
 import javax.validation.constraints.Email;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import dev.wakandaacademy.produdoro.pomodoro.domain.ConfiguracaoPadrao;
 import dev.wakandaacademy.produdoro.usuario.application.api.UsuarioNovoRequest;
 import lombok.AccessLevel;
@@ -40,5 +37,13 @@ public class Usuario {
 		this.email = usuarioNovo.getEmail();
 		this.status = StatusUsuario.FOCO;
 		this.configuracao = new ConfiguracaoUsuario(configuracaoPadrao);
+	}
+
+	public void mudaStatusParaPausaLonga(){
+		this.status = StatusUsuario.PAUSA_LONGA;
+	}
+
+	public void mudaStatusParaPausaCurta(){
+		this.status = StatusUsuario.PAUSA_CURTA;
 	}
 }
