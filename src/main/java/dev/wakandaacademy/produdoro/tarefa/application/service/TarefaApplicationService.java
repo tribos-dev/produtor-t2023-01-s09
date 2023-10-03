@@ -12,9 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.util.UUID;
-
 import javax.validation.Valid;
 
 @Service
@@ -23,7 +21,6 @@ import javax.validation.Valid;
 public class TarefaApplicationService implements TarefaService {
     private final TarefaRepository tarefaRepository;
     private final UsuarioRepository usuarioRepository;
-
 
     @Override
     public TarefaIdResponse criaNovaTarefa(TarefaRequest tarefaRequest) {
@@ -50,5 +47,17 @@ public class TarefaApplicationService implements TarefaService {
 		tarefa.altera(editaTarefaRequest);
 		tarefaRepository.salva(tarefa);
 		log.info("[finaliza] TarefaApplicationService - editaTarefa");
+    }
+
+	public void concluiTarefa(String usuario, UUID idTarefa) {
+		log.info("[inicia] TarefaApplicationService - concluiTarefa");
+		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+		log.info("[usuarioPorEmail] {}", usuarioPorEmail);
+		Tarefa tarefa =
+				tarefaRepository.buscaTarefaPorId(idTarefa).orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "Tarefa não encontrada!"));
+		tarefa.pertenceAoUsuario(usuarioPorEmail);
+		tarefa.concluiTarefa();
+		tarefaRepository.salva(tarefa);
+		log.info("[finaliza] TarefaApplicationService - concluiTarefa");
 	}
 }
